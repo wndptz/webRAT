@@ -1,0 +1,2213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de RAT - Relatório de Atendimento Técnico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .header-top h1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+        
+        .consultor-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .consultor-container label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .consultor-container input {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            min-width: 200px;
+        }
+        
+        .consultor-container input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .consultor-container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .card-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 15px;
+            padding-right: 35px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 8px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .km-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .km-info .badge {
+            font-size: 0.8rem;
+            padding: 3px 8px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-light {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .btn-light:hover {
+            background-color: #d5dbdb;
+        }
+        
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        table th {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background-color: #d5f4e6;
+            color: var(--success);
+        }
+        
+        .badge-info {
+            background-color: #d6eaf8;
+            color: var(--secondary);
+        }
+        
+        .badge-warning {
+            background-color: #fef5e7;
+            color: var(--warning);
+        }
+        
+        .badge-secondary {
+            background-color: #e8e8e8;
+            color: #666;
+        }
+        
+        .badge-primary {
+            background-color: #d6eaf8;
+            color: var(--secondary);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+            color: var(--dark);
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--light);
+        }
+        
+        .action-btn.view {
+            color: var(--secondary);
+        }
+        
+        .action-btn.edit {
+            color: var(--warning);
+        }
+        
+        .action-btn.copy {
+            color: var(--success);
+        }
+        
+        .action-btn.delete {
+            color: var(--danger);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .markdown-preview {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.warning {
+            background-color: var(--warning);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        .form-mode-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .form-mode-new {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .form-mode-edit {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .faturamento-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-top: 25px;
+        }
+        
+        .faturamento-header {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .valor-hora-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .valor-hora-container label {
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+        
+        .valor-hora-container input {
+            width: 150px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .valor-hora-container input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .totalizador {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .totalizador h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .totalizador-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .totalizador-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+        
+        .checkboxes-container {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .consultor-container {
+                width: 100%;
+            }
+            
+            .consultor-container input {
+                min-width: 100%;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .valor-hora-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .valor-hora-container input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <h1><i class="fas fa-clipboard-list"></i> Sistema de RAT</h1>
+                <div class="consultor-container">
+                    <label for="consultor"><i class="fas fa-user-tie"></i> Consultor:</label>
+                    <input type="text" id="consultor" class="form-control" placeholder="Digite seu nome">
+                </div>
+            </div>
+            <p class="subtitle">Relatório de Atendimento Técnico - Registre e gerencie seus atendimentos</p>
+        </header>
+        
+        <div class="card">
+            <h2 class="card-title">
+                <span><i class="fas fa-plus-circle"></i> Novo Relatório de Atendimento</span>
+                <span id="formModeIndicator" class="form-mode-indicator form-mode-new">Novo</span>
+            </h2>
+            
+            <form id="ratForm">
+                <input type="hidden" id="ratId" value="">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projeto">Projeto (Sistema) *</label>
+                        <input type="text" id="projeto" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="empresa">Empresa *</label>
+                        <input type="text" id="empresa" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cnpj">CNPJ</label>
+                        <input type="text" id="cnpj" class="form-control" placeholder="00.000.000/0000-00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contato">Contato</label>
+                        <input type="text" id="contato" class="form-control" placeholder="Nome e telefone do contato">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tipoAtendimento">Tipo de Atendimento *</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="tipoPresencial" name="tipoAtendimento" value="Presencial" checked>
+                                <label for="tipoPresencial">Presencial</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="tipoRemoto" name="tipoAtendimento" value="Remoto">
+                                <label for="tipoRemoto">Remoto</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="distanciaKm">Distância (KM)</label>
+                        <input type="number" id="distanciaKm" class="form-control" min="0" step="0.1" value="0">
+                        <div class="km-info">
+                            <span>Total Combustível: R$ <strong id="totalKmPreview">0.00</strong></span>
+                            <span class="badge badge-secondary" id="valorKmBadge">Valor por KM: R$ 1.60</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataInicio">Data Início *</label>
+                        <input type="date" id="dataInicio" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="horaInicio">Hora Início *</label>
+                        <input type="time" id="horaInicio" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="intervalo">Intervalo (HH:MM)</label>
+                        <input type="time" id="intervalo" class="form-control" value="01:00">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataFim">Data Fim</label>
+                        <input type="date" id="dataFim" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="horaFim">Hora Fim</label>
+                        <input type="time" id="horaFim" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="horasTrabalhadas">Horas Trabalhadas (HH:MM)</label>
+                        <input type="time" id="horasTrabalhadas" class="form-control" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="descricao">Descrição do Serviço *</label>
+                        <textarea id="descricao" class="form-control" required placeholder="Descreva detalhadamente o serviço realizado..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="valorAlimentacao">Valor Alimentação (R$)</label>
+                        <input type="number" id="valorAlimentacao" class="form-control" step="0.01" min="0" value="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="valorPedagio">Valor Pedágio (R$)</label>
+                        <input type="number" id="valorPedagio" class="form-control" step="0.01" min="0" value="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="valorOutros">Valor Outros (R$)</label>
+                        <input type="number" id="valorOutros" class="form-control" step="0.01" min="0" value="0">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="observacao">Observação</label>
+                        <textarea id="observacao" class="form-control" placeholder="Observações adicionais..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" id="saveButton" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar RAT
+                    </button>
+                    <button type="button" id="calcularHorasBtn" class="btn btn-light">
+                        <i class="fas fa-calculator"></i> Calcular Horas
+                    </button>
+                    <button type="button" id="newRatBtn" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Novo RAT
+                    </button>
+                    <button type="button" id="cancelEditBtn" class="btn btn-danger" style="display: none;">
+                        <i class="fas fa-times"></i> Cancelar Edição
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title">
+                <span><i class="fas fa-list"></i> RATs Registrados</span>
+                <span id="totalRats">0 registros</span>
+            </h2>
+            
+            <div id="ratsList">
+                <!-- Lista será preenchida via JavaScript -->
+                <div class="empty-state">
+                    <i class="fas fa-clipboard"></i>
+                    <h3>Nenhum RAT registrado ainda</h3>
+                    <p>Preencha o formulário acima para criar seu primeiro relatório de atendimento técnico.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="faturamento-container">
+            <h2 class="faturamento-header">
+                <span><i class="fas fa-file-invoice-dollar"></i> Faturamento</span>
+            </h2>
+            
+            <div class="valor-hora-container">
+                <label for="valorHora">Valor da Hora (R$):</label>
+                <input type="number" id="valorHora" step="0.01" min="0" value="0">
+                <button type="button" id="faturarRatsBtn" class="btn btn-success">
+                    <i class="fas fa-file-invoice"></i> Gerar Faturamento
+                </button>
+                <button type="button" id="exportarTodosRatsBtn" class="btn btn-info">
+                    <i class="fas fa-download"></i> Baixar Todos os RATs
+                </button>
+            </div>
+            
+            <div class="checkboxes-container" id="ratsCheckboxes" style="display: none;">
+                <h4><i class="fas fa-check-circle"></i> Selecione os RATs para faturar:</h4>
+                <div class="checkbox-group" id="ratsCheckboxGroup">
+                    <!-- Checkboxes serão gerados dinamicamente -->
+                </div>
+                <div class="actions" style="margin-top: 15px;">
+                    <button type="button" id="selecionarTodosBtn" class="btn btn-light">
+                        <i class="fas fa-check-square"></i> Selecionar Todos
+                    </button>
+                    <button type="button" id="limparSelecaoBtn" class="btn btn-light">
+                        <i class="fas fa-square"></i> Limpar Seleção
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button id="exportJsonBtn" class="btn btn-success">
+                <i class="fas fa-file-export"></i> Exportar JSON
+            </button>
+            <button id="importJsonBtn" class="btn btn-light">
+                <i class="fas fa-file-import"></i> Importar JSON
+            </button>
+            <button id="clearDataBtn" class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i> Limpar Todos os Dados
+            </button>
+        </div>
+    </div>
+    
+    <!-- Modal para visualizar Markdown -->
+    <div id="markdownModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-alt"></i> Relatório Markdown</h3>
+                <button class="close-btn" id="closeMarkdownModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="markdown-preview" id="markdownContent">
+                    <!-- Conteúdo Markdown será inserido aqui -->
+                </div>
+                <div class="actions" style="margin-top: 20px;">
+                    <button id="copyMarkdownBtn" class="btn btn-primary">
+                        <i class="fas fa-copy"></i> Copiar Markdown
+                    </button>
+                    <button id="downloadMarkdownBtn" class="btn btn-success">
+                        <i class="fas fa-download"></i> Baixar como .md
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para visualizar Faturamento -->
+    <div id="faturamentoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Relatório de Faturamento</h3>
+                <button class="close-btn" id="closeFaturamentoModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="markdown-preview" id="faturamentoContent">
+                    <!-- Conteúdo do faturamento será inserido aqui -->
+                </div>
+                <div class="totalizador">
+                    <h4><i class="fas fa-calculator"></i> Totalização</h4>
+                    <div class="totalizador-item">
+                        <span>Total de Horas:</span>
+                        <span id="totalHorasFaturamento">0 horas</span>
+                    </div>
+                    <div class="totalizador-item">
+                        <span>Valor das Horas:</span>
+                        <span id="totalValorHoras">R$ 0,00</span>
+                    </div>
+                    <div class="totalizador-item">
+                        <span>Total de Despesas:</span>
+                        <span id="totalDespesasFaturamento">R$ 0,00</span>
+                    </div>
+                    <div class="totalizador-item">
+                        <span>VALOR TOTAL:</span>
+                        <span id="totalGeralFaturamento">R$ 0,00</span>
+                    </div>
+                </div>
+                <div class="actions" style="margin-top: 20px;">
+                    <button id="copyFaturamentoBtn" class="btn btn-primary">
+                        <i class="fas fa-copy"></i> Copiar Faturamento
+                    </button>
+                    <button id="downloadFaturamentoBtn" class="btn btn-success">
+                        <i class="fas fa-download"></i> Baixar Faturamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notificação -->
+    <div id="notification" class="notification"></div>
+    
+    <footer>
+        <p>Sistema de RAT - Relatório de Atendimento Técnico | Funciona totalmente no navegador</p>
+        <p>Os dados são salvos localmente no seu navegador. Use as opções de exportar para fazer backup.</p>
+    </footer>
+
+    <script>
+        // Estado da aplicação
+        let rats = [];
+        let nextId = 1;
+        let isEditing = false;
+        let currentEditId = null;
+        const VALOR_KM = 1.6; // Valor fixo do multiplicador de KM
+        
+        // Elementos do DOM
+        const ratForm = document.getElementById('ratForm');
+        const ratsList = document.getElementById('ratsList');
+        const totalRats = document.getElementById('totalRats');
+        const calcularHorasBtn = document.getElementById('calcularHorasBtn');
+        const exportJsonBtn = document.getElementById('exportJsonBtn');
+        const importJsonBtn = document.getElementById('importJsonBtn');
+        const clearDataBtn = document.getElementById('clearDataBtn');
+        const markdownModal = document.getElementById('markdownModal');
+        const closeMarkdownModal = document.getElementById('closeMarkdownModal');
+        const markdownContent = document.getElementById('markdownContent');
+        const copyMarkdownBtn = document.getElementById('copyMarkdownBtn');
+        const downloadMarkdownBtn = document.getElementById('downloadMarkdownBtn');
+        const notification = document.getElementById('notification');
+        const ratIdInput = document.getElementById('ratId');
+        const saveButton = document.getElementById('saveButton');
+        const newRatBtn = document.getElementById('newRatBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const formModeIndicator = document.getElementById('formModeIndicator');
+        const distanciaKmInput = document.getElementById('distanciaKm');
+        const totalKmPreview = document.getElementById('totalKmPreview');
+        const valorKmBadge = document.getElementById('valorKmBadge');
+        const consultorInput = document.getElementById('consultor');
+        const valorHoraInput = document.getElementById('valorHora');
+        const faturarRatsBtn = document.getElementById('faturarRatsBtn');
+        const exportarTodosRatsBtn = document.getElementById('exportarTodosRatsBtn');
+        const ratsCheckboxes = document.getElementById('ratsCheckboxes');
+        const ratsCheckboxGroup = document.getElementById('ratsCheckboxGroup');
+        const selecionarTodosBtn = document.getElementById('selecionarTodosBtn');
+        const limparSelecaoBtn = document.getElementById('limparSelecaoBtn');
+        const faturamentoModal = document.getElementById('faturamentoModal');
+        const closeFaturamentoModal = document.getElementById('closeFaturamentoModal');
+        const faturamentoContent = document.getElementById('faturamentoContent');
+        const copyFaturamentoBtn = document.getElementById('copyFaturamentoBtn');
+        const downloadFaturamentoBtn = document.getElementById('downloadFaturamentoBtn');
+        const totalHorasFaturamento = document.getElementById('totalHorasFaturamento');
+        const totalValorHoras = document.getElementById('totalValorHoras');
+        const totalDespesasFaturamento = document.getElementById('totalDespesasFaturamento');
+        const totalGeralFaturamento = document.getElementById('totalGeralFaturamento');
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRats();
+            loadConsultor();
+            loadValorHora();
+            updateRatsList();
+            resetForm();
+            
+            // Salvar consultor quando o campo for alterado
+            consultorInput.addEventListener('input', function() {
+                saveConsultor();
+            });
+            
+            // Salvar valor da hora quando o campo for alterado
+            valorHoraInput.addEventListener('input', function() {
+                saveValorHora();
+            });
+            
+            // Calcular horas trabalhadas quando data/hora fim for alterada
+            document.getElementById('dataFim').addEventListener('change', calcularHoras);
+            document.getElementById('horaFim').addEventListener('change', calcularHoras);
+            calcularHorasBtn.addEventListener('click', calcularHoras);
+            
+            // Calcular total KM quando distância for alterada
+            distanciaKmInput.addEventListener('input', calcularTotalKm);
+            distanciaKmInput.addEventListener('change', calcularTotalKm);
+            
+            // Eventos do formulário
+            ratForm.addEventListener('submit', saveRat);
+            
+            // Eventos dos botões
+            exportJsonBtn.addEventListener('click', exportJson);
+            importJsonBtn.addEventListener('click', importJson);
+            clearDataBtn.addEventListener('click', clearAllData);
+            newRatBtn.addEventListener('click', newRat);
+            cancelEditBtn.addEventListener('click', cancelEdit);
+            faturarRatsBtn.addEventListener('click', prepararFaturamento);
+            exportarTodosRatsBtn.addEventListener('click', exportarTodosRats);
+            selecionarTodosBtn.addEventListener('click', selecionarTodosRats);
+            limparSelecaoBtn.addEventListener('click', limparSelecaoRats);
+            
+            // Eventos dos modais
+            closeMarkdownModal.addEventListener('click', () => {
+                markdownModal.classList.remove('active');
+            });
+            
+            closeFaturamentoModal.addEventListener('click', () => {
+                faturamentoModal.classList.remove('active');
+            });
+            
+            copyMarkdownBtn.addEventListener('click', copyMarkdownToClipboard);
+            downloadMarkdownBtn.addEventListener('click', downloadMarkdown);
+            
+            copyFaturamentoBtn.addEventListener('click', copyFaturamentoToClipboard);
+            downloadFaturamentoBtn.addEventListener('click', downloadFaturamento);
+            
+            // Fechar modais ao clicar fora
+            markdownModal.addEventListener('click', (e) => {
+                if (e.target === markdownModal) {
+                    markdownModal.classList.remove('active');
+                }
+            });
+            
+            faturamentoModal.addEventListener('click', (e) => {
+                if (e.target === faturamentoModal) {
+                    faturamentoModal.classList.remove('active');
+                }
+            });
+            
+            // Atualizar campos baseados no tipo de atendimento
+            document.querySelectorAll('input[name="tipoAtendimento"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateFormBasedOnAttendanceType();
+                });
+            });
+            
+            // Executar uma vez para configurar estado inicial
+            updateFormBasedOnAttendanceType();
+            calcularTotalKm(); // Calcular KM inicial
+        });
+        
+        // Carregar nome do consultor do localStorage
+        function loadConsultor() {
+            const savedConsultor = localStorage.getItem('consultor');
+            if (savedConsultor) {
+                consultorInput.value = savedConsultor;
+            }
+        }
+        
+        // Salvar nome do consultor no localStorage
+        function saveConsultor() {
+            localStorage.setItem('consultor', consultorInput.value.trim());
+        }
+        
+        // Carregar valor da hora do localStorage
+        function loadValorHora() {
+            const savedValorHora = localStorage.getItem('valorHora');
+            if (savedValorHora) {
+                valorHoraInput.value = savedValorHora;
+            }
+        }
+        
+        // Salvar valor da hora no localStorage
+        function saveValorHora() {
+            localStorage.setItem('valorHora', valorHoraInput.value);
+        }
+        
+        // Converter horas no formato HH:MM para horas decimais
+        function converterHorasParaDecimal(horasString) {
+            if (!horasString) return 0;
+            
+            const partes = horasString.split(':');
+            if (partes.length !== 2) return 0;
+            
+            const horas = parseInt(partes[0]) || 0;
+            const minutos = parseInt(partes[1]) || 0;
+            
+            return horas + (minutos / 60);
+        }
+        
+        // Formatar horas decimais para HH:MM
+        function formatarHorasDecimal(horasDecimal) {
+            const horas = Math.floor(horasDecimal);
+            const minutos = Math.round((horasDecimal - horas) * 60);
+            return `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        }
+        
+        // Calcular total KM em R$ (distanciaKm * 1.60)
+        function calcularTotalKm() {
+            const distanciaKm = parseFloat(distanciaKmInput.value) || 0;
+            const totalKm = distanciaKm * VALOR_KM;
+            totalKmPreview.textContent = totalKm.toFixed(2);
+        }
+        
+        // Atualizar campos baseados no tipo de atendimento
+        function updateFormBasedOnAttendanceType() {
+            const tipoAtendimento = document.querySelector('input[name="tipoAtendimento"]:checked').value;
+            const distanciaField = document.getElementById('distanciaKm');
+            const pedagioField = document.getElementById('valorPedagio');
+            
+            if (tipoAtendimento === 'Remoto') {
+                distanciaField.disabled = true;
+                distanciaField.value = '0';
+                pedagioField.disabled = true;
+                pedagioField.value = '0';
+                distanciaField.title = 'Não aplicável para atendimento remoto';
+                pedagioField.title = 'Não aplicável para atendimento remoto';
+                totalKmPreview.textContent = '0.00';
+            } else {
+                distanciaField.disabled = false;
+                pedagioField.disabled = false;
+                distanciaField.title = '';
+                pedagioField.title = '';
+                calcularTotalKm();
+            }
+        }
+        
+        // Carregar RATs do localStorage
+        function loadRats() {
+            const savedRats = localStorage.getItem('rats');
+            if (savedRats) {
+                rats = JSON.parse(savedRats);
+                nextId = rats.length > 0 ? Math.max(...rats.map(rat => rat.id)) + 1 : 1;
+            }
+        }
+        
+        // Salvar RATs no localStorage
+        function saveRats() {
+            localStorage.setItem('rats', JSON.stringify(rats));
+        }
+        
+        // Atualizar lista de RATs na interface
+        function updateRatsList() {
+            if (rats.length === 0) {
+                ratsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard"></i>
+                        <h3>Nenhum RAT registrado ainda</h3>
+                        <p>Preencha o formulário acima para criar seu primeiro relatório de atendimento técnico.</p>
+                    </div>
+                `;
+                totalRats.textContent = '0 registros';
+                ratsCheckboxes.style.display = 'none';
+                return;
+            }
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Projeto</th>
+                            <th>Cliente</th>
+                            <th>Tipo</th>
+                            <th>Data</th>
+                            <th>Horas</th>
+                            <th>KM</th>
+                            <th>Combustível</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            rats.forEach(rat => {
+                // Formatar data sem problemas de fuso horário
+                // Converter YYYY-MM-DD para DD/MM/YYYY
+                const dataParts = rat.dataInicio.split('-');
+                let dataFormatada;
+                
+                if (dataParts.length === 3) {
+                    // Formato YYYY-MM-DD para DD/MM/YYYY
+                    dataFormatada = `${dataParts[2]}/${dataParts[1]}/${dataParts[0]}`;
+                } else {
+                    // Fallback para formato local
+                    try {
+                        // Criar data sem fuso horário usando 'T00:00:00'
+                        const dataObj = new Date(rat.dataInicio + 'T00:00:00');
+                        dataFormatada = dataObj.toLocaleDateString('pt-BR');
+                    } catch (e) {
+                        dataFormatada = rat.dataInicio;
+                    }
+                }
+                
+                // Determinar classe do badge baseado no tipo de atendimento
+                const tipoBadgeClass = rat.tipoAtendimento === 'Presencial' ? 'badge-success' : 'badge-info';
+                const tipoBadgeText = rat.tipoAtendimento === 'Presencial' ? 'Presencial' : 'Remoto';
+                
+                // Calcular total KM se não existir (para compatibilidade com dados antigos)
+                const totalKm = rat.totalKm || (rat.distanciaKm * rat.valorKm || rat.distanciaKm * VALOR_KM);
+                
+                html += `
+                    <tr>
+                        <td>${rat.id}</td>
+                        <td><strong>${rat.projeto}</strong></td>
+                        <td>${rat.empresa}</td>
+                        <td><span class="badge ${tipoBadgeClass}">${tipoBadgeText}</span></td>
+                        <td>${dataFormatada}</td>
+                        <td><span class="badge badge-success">${rat.horasTrabalhadas}</span></td>
+                        <td>${rat.distanciaKm || '0'} km</td>
+                        <td><span class="badge badge-secondary">R$ ${totalKm.toFixed(2)}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" onclick="editRat(${rat.id})" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn copy" onclick="copyRat(${rat.id})" title="Criar Cópia">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button class="action-btn" onclick="generateMarkdown(${rat.id})" title="Gerar Markdown">
+                                    <i class="fas fa-file-alt"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteRat(${rat.id})" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                    </tbody>
+                </table>
+            `;
+            
+            ratsList.innerHTML = html;
+            totalRats.textContent = `${rats.length} registro${rats.length !== 1 ? 's' : ''}`;
+            
+            // Atualizar checkboxes para faturamento
+            atualizarCheckboxesFaturamento();
+        }
+        
+        // Atualizar checkboxes para seleção de RATs para faturamento
+        function atualizarCheckboxesFaturamento() {
+            if (rats.length === 0) {
+                ratsCheckboxes.style.display = 'none';
+                return;
+            }
+            
+            ratsCheckboxes.style.display = 'block';
+            let html = '';
+            
+            rats.forEach(rat => {
+                // Formatar data
+                const dataParts = rat.dataInicio.split('-');
+                const dataFormatada = dataParts.length === 3 ? 
+                    `${dataParts[2]}/${dataParts[1]}/${dataParts[0]}` : rat.dataInicio;
+                
+                html += `
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="rat_${rat.id}" value="${rat.id}" checked>
+                        <label for="rat_${rat.id}">
+                            <strong>RAT #${rat.id}</strong> - ${rat.projeto} (${rat.empresa}) - ${dataFormatada}
+                        </label>
+                    </div>
+                `;
+            });
+            
+            ratsCheckboxGroup.innerHTML = html;
+        }
+        
+        // Selecionar todos os RATs para faturamento
+        function selecionarTodosRats() {
+            const checkboxes = ratsCheckboxGroup.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+        
+        // Limpar seleção de RATs para faturamento
+        function limparSelecaoRats() {
+            const checkboxes = ratsCheckboxGroup.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+        
+        // Preparar faturamento - mostrar modal com checkboxes
+        function prepararFaturamento() {
+            if (rats.length === 0) {
+                showNotification('Não há RATs registrados para faturar.', 'warning');
+                return;
+            }
+            
+            const valorHora = parseFloat(valorHoraInput.value);
+            if (!valorHora || valorHora <= 0) {
+                showNotification('Por favor, informe um valor válido para a hora.', 'warning');
+                valorHoraInput.focus();
+                return;
+            }
+            
+            // Verificar RATs com horas inválidas ou zeradas
+            const ratsComHorasInvalidas = [];
+            const ratsRecalculados = [];
+            
+            rats.forEach(rat => {
+                const horas = rat.horasTrabalhadas;
+                
+                // Verificar se horas estão vazias, zeradas ou inválidas
+                if (!horas || horas === '00:00' || horas === '00:00:00' || horas.trim() === '') {
+                    ratsComHorasInvalidas.push({
+                        id: rat.id,
+                        projeto: rat.projeto,
+                        empresa: rat.empresa,
+                        dataInicio: rat.dataInicio,
+                        temDadosParaCalcular: rat.dataInicio && rat.horaInicio && rat.dataFim && rat.horaFim
+                    });
+                    
+                    // Tentar recalcular se tiver dados suficientes
+                    if (rat.dataInicio && rat.horaInicio && rat.dataFim && rat.horaFim) {
+                        const horasCalculadas = calcularHorasParaRat(rat);
+                        if (horasCalculadas && horasCalculadas !== '00:00') {
+                            // Atualizar o RAT com as horas recalculadas
+                            rat.horasTrabalhadas = horasCalculadas;
+                            ratsRecalculados.push({
+                                id: rat.id,
+                                projeto: rat.projeto,
+                                horasAntigas: horas,
+                                horasNovas: horasCalculadas
+                            });
+                        }
+                    }
+                }
+            });
+            
+            // Se houver RATs recalculados, salvar no localStorage
+            if (ratsRecalculados.length > 0) {
+                saveRats();
+                showNotification(`${ratsRecalculados.length} RAT(s) tiveram as horas recalculadas automaticamente.`, 'success');
+                
+                // Opcional: mostrar detalhes dos recálculos
+                if (ratsRecalculados.length <= 3) {
+                    let detalhes = 'Recálculos:\n';
+                    ratsRecalculados.forEach(r => {
+                        detalhes += `• RAT #${r.id} (${r.projeto}): ${r.horasAntigas || 'vazio'} → ${r.horasNovas}\n`;
+                    });
+                    setTimeout(() => alert(detalhes), 100);
+                }
+            }
+            
+            // Se ainda houver RATs com horas inválidas após recálculo
+            const ratsAindaInvalidos = rats.filter(rat => {
+                const horas = rat.horasTrabalhadas;
+                return !horas || horas === '00:00' || horas === '00:00:00' || horas.trim() === '';
+            });
+            
+            if (ratsAindaInvalidos.length > 0) {
+                let mensagem = `⚠️ ATENÇÃO: ${ratsAindaInvalidos.length} RAT(s) ainda têm horas trabalhadas zeradas ou inválidas:\n\n`;
+                
+                ratsAindaInvalidos.forEach(rat => {
+                    const dataFormatada = rat.dataInicio ? new Date(rat.dataInicio + 'T00:00:00').toLocaleDateString('pt-BR') : 'Data não informada';
+                    mensagem += `• RAT #${rat.id}: ${rat.projeto} - ${rat.empresa} (${dataFormatada})\n`;
+                });
+                
+                mensagem += `\nPara faturar corretamente:\n`;
+                mensagem += `1. Edite cada RAT e preencha as horas manualmente\n`;
+                mensagem += `2. Ou preencha Data/Hora Fim para cálculo automático\n`;
+                mensagem += `3. Ou use "Calcular Horas" no formulário de edição\n\n`;
+                mensagem += `Deseja continuar mesmo assim?`;
+                
+                if (!confirm(mensagem)) {
+                    return; // Usuário cancelou
+                }
+            }
+            
+            // Atualizar lista para mostrar horas recalculadas
+            if (ratsRecalculados.length > 0) {
+                updateRatsList();
+            }
+            
+            // Gerar faturamento com RATs selecionados
+            gerarFaturamento();
+        }
+
+        // Função auxiliar para calcular horas para um RAT específico
+        function calcularHorasParaRat(rat) {
+            try {
+                if (!rat.dataInicio || !rat.horaInicio || !rat.dataFim || !rat.horaFim) {
+                    return null;
+                }
+                
+                // Converter para objetos Date
+                const inicio = new Date(`${rat.dataInicio}T${rat.horaInicio}`);
+                const fim = new Date(`${rat.dataFim}T${rat.horaFim}`);
+                
+                // Verificar se a data fim é anterior à data início
+                if (fim < inicio) {
+                    return null;
+                }
+                
+                // Calcular diferença em minutos
+                let diffMs = fim - inicio;
+                let diffMins = Math.floor(diffMs / 60000);
+                
+                // Subtrair intervalo se existir
+                if (rat.intervalo) {
+                    const [intervaloHoras, intervaloMins] = rat.intervalo.split(':').map(Number);
+                    const intervaloTotalMins = (intervaloHoras || 0) * 60 + (intervaloMins || 0);
+                    diffMins -= intervaloTotalMins;
+                }
+                
+                // Garantir que não seja negativo
+                diffMins = Math.max(0, diffMins);
+                
+                // Converter para HH:MM
+                const horas = Math.floor(diffMins / 60);
+                const minutos = diffMins % 60;
+                
+                const horasFormatadas = horas.toString().padStart(2, '0');
+                const minutosFormatados = minutos.toString().padStart(2, '0');
+                
+                return `${horasFormatadas}:${minutosFormatados}`;
+            } catch (e) {
+                console.error('Erro ao calcular horas para RAT:', e);
+                return null;
+            }
+        }
+        
+        // Gerar relatório de faturamento
+        function gerarFaturamento() {
+            const valorHora = parseFloat(valorHoraInput.value);
+            const checkboxes = ratsCheckboxGroup.querySelectorAll('input[type="checkbox"]:checked');
+            
+            if (checkboxes.length === 0) {
+                showNotification('Selecione pelo menos um RAT para faturar.', 'warning');
+                return;
+            }
+            
+            // Obter IDs dos RATs selecionados
+            const ratsSelecionadosIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+            const ratsSelecionados = rats.filter(rat => ratsSelecionadosIds.includes(rat.id));
+            
+            if (ratsSelecionados.length === 0) {
+                showNotification('Nenhum RAT válido selecionado.', 'error');
+                return;
+            }
+            
+            // Ordenar por data
+            ratsSelecionados.sort((a, b) => new Date(a.dataInicio) - new Date(b.dataInicio));
+            
+            // Calcular totais
+            let totalHorasDecimal = 0;
+            let totalDespesas = 0;
+            let totalValorHorasCalculado = 0;
+            
+            // Gerar markdown do faturamento
+            const consultor = consultorInput.value.trim() || 'Não informado';
+            const primeiroNomeConsultor = consultor.split(' ')[0];
+            const dataAtual = new Date().toISOString().split('T')[0];
+            
+            let markdown = `# RELATÓRIO DE FATURAMENTO - CONSULTORIA TÉCNICA\n\n`;
+            markdown += `**Consultor:** ${consultor}\n`;
+            markdown += `**Valor da Hora:** R$ ${valorHora.toFixed(2)}\n`;
+            markdown += `**Data do Faturamento:** ${new Date().toLocaleDateString('pt-BR')}\n`;
+            markdown += `**Quantidade de RATs:** ${ratsSelecionados.length}\n\n`;
+            markdown += `---\n\n`;
+            markdown += `## RATs Incluídos no Faturamento\n\n`;
+            
+            // Adicionar cada RAT
+            ratsSelecionados.forEach(rat => {
+                // Calcular valores para este RAT
+                const horasDecimal = converterHorasParaDecimal(rat.horasTrabalhadas);
+                const valorHorasRat = horasDecimal * valorHora;
+                const totalKm = rat.totalKm || (rat.distanciaKm * rat.valorKm || rat.distanciaKm * VALOR_KM);
+                const totalDespesasRat = rat.valorAlimentacao + totalKm + rat.valorPedagio + rat.valorOutros;
+                const totalRat = valorHorasRat + totalDespesasRat;
+                
+                // Acumular totais
+                totalHorasDecimal += horasDecimal;
+                totalDespesas += totalDespesasRat;
+                totalValorHorasCalculado += valorHorasRat;
+                
+                // Formatar data
+                const dataParts = rat.dataInicio.split('-');
+                const dataFormatada = dataParts.length === 3 ? 
+                    `${dataParts[2]}/${dataParts[1]}/${dataParts[0]}` : rat.dataInicio;
+                
+                markdown += `### RAT #${rat.id} - ${rat.projeto}\n`;
+                markdown += `- **Cliente:** ${rat.empresa}\n`;
+                markdown += `- **Data:** ${dataFormatada}\n`;
+                markdown += `- **Horas Trabalhadas:** ${rat.horasTrabalhadas} (${horasDecimal.toFixed(2)}h)\n`;
+                markdown += `- **Valor Horas:** R$ ${valorHorasRat.toFixed(2)}\n`;
+                
+                if (totalDespesasRat > 0) {
+                    markdown += `- **Despesas:** R$ ${totalDespesasRat.toFixed(2)}\n`;
+                }
+                
+                markdown += `- **TOTAL RAT:** **R$ ${totalRat.toFixed(2)}**\n\n`;
+            });
+            
+            // Calcular totais gerais
+            const totalGeral = totalValorHorasCalculado + totalDespesas;
+            
+            // Adicionar totalização
+            markdown += `---\n\n`;
+            markdown += `## TOTALIZAÇÃO\n\n`;
+            markdown += `| Item | Valor |\n`;
+            markdown += `| :--- | :--- |\n`;
+            markdown += `| **Total de Horas** | ${formatarHorasDecimal(totalHorasDecimal)} (${totalHorasDecimal.toFixed(2)}h) |\n`;
+            markdown += `| **Valor das Horas** | R$ ${totalValorHorasCalculado.toFixed(2)} |\n`;
+            markdown += `| **Total de Despesas** | R$ ${totalDespesas.toFixed(2)} |\n`;
+            markdown += `| **VALOR TOTAL** | **R$ ${totalGeral.toFixed(2)}** |\n\n`;
+            markdown += `---\n\n`;
+            markdown += `*Faturamento gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}*\n`;
+            
+            // Exibir no modal
+            faturamentoContent.textContent = markdown;
+            
+            // Atualizar totalizador
+            totalHorasFaturamento.textContent = `${formatarHorasDecimal(totalHorasDecimal)} (${totalHorasDecimal.toFixed(2)}h)`;
+            totalValorHoras.textContent = `R$ ${totalValorHorasCalculado.toFixed(2)}`;
+            totalDespesasFaturamento.textContent = `R$ ${totalDespesas.toFixed(2)}`;
+            totalGeralFaturamento.textContent = `R$ ${totalGeral.toFixed(2)}`;
+            
+            // Mostrar modal
+            faturamentoModal.classList.add('active');
+            
+            // Armazenar faturamento atual para download/cópia
+            window.currentFaturamento = markdown;
+            window.currentFaturamentoFilename = `FATURAMENTO_${primeiroNomeConsultor}_${dataAtual}.md`;
+        }
+        
+        // Copiar faturamento para a área de transferência
+        function copyFaturamentoToClipboard() {
+            if (!window.currentFaturamento) return;
+            
+            navigator.clipboard.writeText(window.currentFaturamento)
+                .then(() => {
+                    showNotification('Faturamento copiado para a área de transferência!', 'success');
+                })
+                .catch(err => {
+                    console.error('Erro ao copiar: ', err);
+                    showNotification('Erro ao copiar para a área de transferência', 'error');
+                });
+        }
+        
+        // Baixar faturamento como arquivo
+        function downloadFaturamento() {
+            if (!window.currentFaturamento || !window.currentFaturamentoFilename) return;
+            
+            const blob = new Blob([window.currentFaturamento], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = window.currentFaturamentoFilename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Faturamento baixado com sucesso!', 'success');
+        }
+        
+        // Exportar todos os RATs como arquivos markdown individuais
+        function exportarTodosRats() {
+            if (rats.length === 0) {
+                showNotification('Não há RATs para exportar.', 'warning');
+                return;
+            }
+            
+            const consultor = consultorInput.value.trim() || 'Consultor';
+            const primeiroNomeConsultor = consultor.split(' ')[0];
+            
+            // Para cada RAT, gerar e baixar markdown
+            rats.forEach(rat => {
+                // Gerar markdown para este RAT
+                generateMarkdownForDownload(rat, primeiroNomeConsultor);
+            });
+            
+            showNotification(`${rats.length} RAT(s) exportado(s) com sucesso!`, 'success');
+        }
+        
+        // Gerar markdown para download de um RAT específico
+        function generateMarkdownForDownload(rat, primeiroNomeConsultor) {
+            // Formatar data sem problemas de fuso horário
+            let dataFormatada;
+            const dataParts = rat.dataInicio.split('-');
+            
+            if (dataParts.length === 3) {
+                // Formato YYYY-MM-DD para DD/MM/YYYY
+                dataFormatada = `${dataParts[2]}/${dataParts[1]}/${dataParts[0]}`;
+            } else {
+                // Fallback para formato local
+                try {
+                    const dataObj = new Date(rat.dataInicio + 'T00:00:00');
+                    dataFormatada = dataObj.toLocaleDateString('pt-BR');
+                } catch (e) {
+                    dataFormatada = rat.dataInicio;
+                }
+            }
+            
+            // Formatar data de término
+            let dataFimFormatada;
+            const dataFimParts = rat.dataFim.split('-');
+            
+            if (dataFimParts.length === 3) {
+                // Formato YYYY-MM-DD para DD/MM/YYYY
+                dataFimFormatada = `${dataFimParts[2]}/${dataFimParts[1]}/${dataFimParts[0]}`;
+            } else {
+                // Fallback para formato local
+                try {
+                    const dataObj = new Date(rat.dataFim + 'T00:00:00');
+                    dataFimFormatada = dataObj.toLocaleDateString('pt-BR');
+                } catch (e) {
+                    dataFimFormatada = rat.dataFim;
+                }
+            }
+            
+            // Calcular totais
+            const totalKm = rat.totalKm || (rat.distanciaKm * rat.valorKm || rat.distanciaKm * VALOR_KM);
+            const totalDespesas = rat.valorAlimentacao + totalKm + rat.valorPedagio + rat.valorOutros;
+            
+            // Criar markdown com layout em duas colunas para Detalhes do Atendimento
+            const markdown = `# RELATÓRIO DE ATENDIMENTO TÉCNICO - RAT #${rat.id}
+
+## Informações do Projeto
+- **Projeto/Sistema:** ${rat.projeto}
+- **Cliente/Empresa:** ${rat.empresa}
+- **CNPJ:** ${rat.cnpj || 'Não informado'}
+- **Contato:** ${rat.contato || 'Não informado'}
+- **Consultor:** ${rat.consultor || consultorInput.value || 'Não informado'}
+
+## Detalhes do Atendimento
+| | |
+| :--- | :--- |
+| **Tipo de Atendimento:** ${rat.tipoAtendimento} | ${rat.tipoAtendimento === 'Presencial' && rat.distanciaKm > 0 ? `**Distância Percorrida:** ${rat.distanciaKm} km` : ''} |
+| **Data de Início:** ${dataFormatada} | **Hora de Início:** ${rat.horaInicio} |
+| **Data de Término:** ${dataFimFormatada} | **Hora de Término:** ${rat.horaFim || 'Não informada'} |
+| **Intervalo:** ${rat.intervalo} | **Horas Trabalhadas:** ${rat.horasTrabalhadas} |
+
+## Descrição do Serviço
+${rat.descricao}
+
+## Despesas
+| Item | Valor (R$) |
+| :--- | :--- |
+| **Alimentação** | ${rat.valorAlimentacao.toFixed(2)} |
+${rat.tipoAtendimento === 'Presencial' && totalKm > 0 ? `| **Combustível** | ${totalKm.toFixed(2)} |\n` : ''}
+${rat.tipoAtendimento === 'Presencial' && rat.valorPedagio > 0 ? `| **Pedágio** | ${rat.valorPedagio.toFixed(2)} |\n` : ''}
+${rat.valorOutros > 0 ? `| **Outros** | ${rat.valorOutros.toFixed(2)} |\n` : ''}
+| **TOTAL** | **${totalDespesas.toFixed(2)}** |
+
+## Observações
+${rat.observacao || 'Nenhuma observação adicional.'}
+
+---
+*Relatório gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}*`;
+            
+            // Criar nome do arquivo: primeira palavra do consultor + dataInicio + id
+            const nomeArquivo = `${primeiroNomeConsultor}_${rat.dataInicio}_${rat.id}.md`;
+            
+            // Baixar arquivo
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nomeArquivo;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Salvar um novo RAT ou atualizar existente
+        function saveRat(e) {
+            e.preventDefault();
+            
+            // Validar campos obrigatórios
+            const projeto = document.getElementById('projeto').value.trim();
+            const empresa = document.getElementById('empresa').value.trim();
+            const dataInicio = document.getElementById('dataInicio').value;
+            const horaInicio = document.getElementById('horaInicio').value;
+            const descricao = document.getElementById('descricao').value.trim();
+            const tipoAtendimento = document.querySelector('input[name="tipoAtendimento"]:checked').value;
+            const consultor = consultorInput.value.trim();
+            
+            if (!projeto || !empresa || !dataInicio || !horaInicio || !descricao) {
+                showNotification('Preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+            
+            if (!consultor) {
+                showNotification('Por favor, informe o nome do consultor no campo acima.', 'warning');
+                consultorInput.focus();
+                return;
+            }
+            
+            // Calcular horas trabalhadas se não preenchido
+            let horasTrabalhadas = document.getElementById('horasTrabalhadas').value;
+            if (!horasTrabalhadas) {
+                calcularHoras();
+                horasTrabalhadas = document.getElementById('horasTrabalhadas').value;
+            }
+            
+            // Formatar datas para evitar problemas com fuso horário
+            const dataFimInput = document.getElementById('dataFim').value || dataInicio;
+            
+            // Calcular total KM
+            const distanciaKm = parseFloat(document.getElementById('distanciaKm').value) || 0;
+            const totalKm = distanciaKm * VALOR_KM;
+            
+            // Criar objeto RAT
+            const ratData = {
+                projeto,
+                empresa,
+                cnpj: document.getElementById('cnpj').value.trim(),
+                contato: document.getElementById('contato').value.trim(),
+                tipoAtendimento,
+                distanciaKm,
+                totalKm,
+                valorKm: VALOR_KM, // Armazena o multiplicador usado
+                dataInicio: dataInicio,
+                horaInicio,
+                intervalo: document.getElementById('intervalo').value,
+                dataFim: dataFimInput,
+                horaFim: document.getElementById('horaFim').value,
+                horasTrabalhadas: horasTrabalhadas || '00:00',
+                descricao,
+                valorAlimentacao: parseFloat(document.getElementById('valorAlimentacao').value) || 0,
+                valorPedagio: parseFloat(document.getElementById('valorPedagio').value) || 0,
+                valorOutros: parseFloat(document.getElementById('valorOutros').value) || 0,
+                observacao: document.getElementById('observacao').value.trim(),
+                consultor, // Adiciona o consultor ao RAT
+                dataCriacao: new Date().toISOString()
+            };
+            
+            if (isEditing && currentEditId) {
+                // Atualizar RAT existente
+                const index = rats.findIndex(r => r.id === currentEditId);
+                if (index !== -1) {
+                    // Mantém o ID original
+                    ratData.id = currentEditId;
+                    // Mantém a data de criação original
+                    ratData.dataCriacao = rats[index].dataCriacao;
+                    // Atualiza o RAT
+                    rats[index] = ratData;
+                    
+                    showNotification('RAT atualizado com sucesso!', 'success');
+                }
+            } else {
+                // Criar novo RAT
+                ratData.id = nextId++;
+                rats.push(ratData);
+                showNotification('RAT salvo com sucesso!', 'success');
+            }
+            
+            // Salvar no localStorage
+            saveRats();
+            
+            // Atualizar interface
+            updateRatsList();
+            
+            // Resetar formulário (exceto consultor)
+            resetForm();
+        }
+        
+        // Editar um RAT existente
+        function editRat(id) {
+            const rat = rats.find(r => r.id === id);
+            if (!rat) return;
+            
+            // Definir modo de edição
+            isEditing = true;
+            currentEditId = id;
+            
+            // Preencher formulário com os dados do RAT
+            ratIdInput.value = id;
+            document.getElementById('projeto').value = rat.projeto;
+            document.getElementById('empresa').value = rat.empresa;
+            document.getElementById('cnpj').value = rat.cnpj;
+            document.getElementById('contato').value = rat.contato;
+            
+            // Definir tipo de atendimento
+            if (rat.tipoAtendimento === 'Presencial') {
+                document.getElementById('tipoPresencial').checked = true;
+            } else {
+                document.getElementById('tipoRemoto').checked = true;
+            }
+            updateFormBasedOnAttendanceType();
+            
+            document.getElementById('distanciaKm').value = rat.distanciaKm || 0;
+            document.getElementById('dataInicio').value = rat.dataInicio;
+            document.getElementById('horaInicio').value = rat.horaInicio;
+            document.getElementById('intervalo').value = rat.intervalo;
+            document.getElementById('dataFim').value = rat.dataFim;
+            document.getElementById('horaFim').value = rat.horaFim;
+            document.getElementById('horasTrabalhadas').value = rat.horasTrabalhadas;
+            document.getElementById('descricao').value = rat.descricao;
+            document.getElementById('valorAlimentacao').value = rat.valorAlimentacao;
+            document.getElementById('valorPedagio').value = rat.valorPedagio;
+            document.getElementById('valorOutros').value = rat.valorOutros;
+            document.getElementById('observacao').value = rat.observacao;
+            
+            // Calcular e mostrar total KM
+            calcularTotalKm();
+            
+            // Atualizar interface do formulário
+            saveButton.innerHTML = '<i class="fas fa-save"></i> Atualizar RAT';
+            saveButton.className = 'btn btn-warning';
+            formModeIndicator.textContent = 'Editando';
+            formModeIndicator.className = 'form-mode-indicator form-mode-edit';
+            cancelEditBtn.style.display = 'inline-flex';
+            newRatBtn.style.display = 'none';
+            
+            showNotification(`Editando RAT #${id}. Faça as alterações necessárias e clique em "Atualizar RAT".`, 'warning');
+            
+            // Rolar para o formulário
+            document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Criar uma cópia de um RAT
+        function copyRat(id) {
+            const rat = rats.find(r => r.id === id);
+            if (!rat) return;
+            
+            // Criar cópia do RAT
+            const ratCopy = JSON.parse(JSON.stringify(rat));
+            
+            // Remover ID e data de criação para criar novo registro
+            delete ratCopy.id;
+            ratCopy.dataCriacao = new Date().toISOString();
+            
+            // Adicionar " (Cópia)" ao nome do projeto
+            ratCopy.projeto = ratCopy.projeto + " (Cópia)";
+            
+            // Recalcular totalKm com o valor atual de VALOR_KM
+            ratCopy.totalKm = (ratCopy.distanciaKm || 0) * VALOR_KM;
+            ratCopy.valorKm = VALOR_KM;
+            
+            // Adicionar à lista
+            ratCopy.id = nextId++;
+            rats.push(ratCopy);
+            
+            // Salvar no localStorage
+            saveRats();
+            
+            // Atualizar interface
+            updateRatsList();
+            
+            // Preencher formulário com a cópia (para possível edição)
+            editRat(ratCopy.id);
+            
+            showNotification(`Cópia do RAT #${id} criada com sucesso!`, 'success');
+        }
+        
+        // Cancelar edição
+        function cancelEdit() {
+            resetForm();
+            showNotification('Edição cancelada. Modo de criação ativado.', 'warning');
+        }
+        
+        // Criar novo RAT
+        function newRat() {
+            resetForm();
+            showNotification('Pronto para criar um novo RAT!', 'success');
+        }
+        
+        // Resetar formulário para modo de criação
+        function resetForm() {
+            // Limpar campos (exceto consultor)
+            ratIdInput.value = '';
+            document.getElementById('projeto').value = '';
+            document.getElementById('empresa').value = '';
+            document.getElementById('cnpj').value = '';
+            document.getElementById('contato').value = '';
+            document.getElementById('distanciaKm').value = '0';
+            document.getElementById('horaFim').value = '';
+            document.getElementById('horasTrabalhadas').value = '';
+            document.getElementById('descricao').value = '';
+            document.getElementById('valorAlimentacao').value = '0';
+            document.getElementById('valorPedagio').value = '0';
+            document.getElementById('valorOutros').value = '0';
+            document.getElementById('observacao').value = '';
+            
+            // Resetar tipo de atendimento para Presencial
+            document.getElementById('tipoPresencial').checked = true;
+            updateFormBasedOnAttendanceType();
+            
+            // Manter data atual
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dataInicio').value = today;
+            document.getElementById('dataFim').value = today;
+            
+            // Configurar hora atual
+            const now = new Date();
+            const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('horaInicio').value = currentTime;
+            
+            // Calcular total KM
+            calcularTotalKm();
+            
+            // Resetar modo de edição
+            isEditing = false;
+            currentEditId = null;
+            
+            // Atualizar interface do formulário
+            saveButton.innerHTML = '<i class="fas fa-save"></i> Salvar RAT';
+            saveButton.className = 'btn btn-primary';
+            formModeIndicator.textContent = 'Novo';
+            formModeIndicator.className = 'form-mode-indicator form-mode-new';
+            cancelEditBtn.style.display = 'none';
+            newRatBtn.style.display = 'inline-flex';
+        }
+        
+        // Calcular horas trabalhadas
+        function calcularHoras() {
+            const dataInicio = document.getElementById('dataInicio').value;
+            const horaInicio = document.getElementById('horaInicio').value;
+            const dataFim = document.getElementById('dataFim').value;
+            const horaFim = document.getElementById('horaFim').value;
+            const intervalo = document.getElementById('intervalo').value;
+            
+            if (!dataInicio || !horaInicio || !dataFim || !horaFim) {
+                showNotification('Preencha data/hora início e fim para calcular as horas', 'error');
+                return;
+            }
+            
+            // Converter para objetos Date
+            const inicio = new Date(`${dataInicio}T${horaInicio}`);
+            const fim = new Date(`${dataFim}T${horaFim}`);
+            
+            // Verificar se a data fim é anterior à data início
+            if (fim < inicio) {
+                showNotification('A data/hora fim não pode ser anterior à data/hora início', 'error');
+                document.getElementById('horasTrabalhadas').value = '00:00';
+                return;
+            }
+            
+            // Calcular diferença em minutos
+            let diffMs = fim - inicio;
+            let diffMins = Math.floor(diffMs / 60000);
+            
+            // Subtrair intervalo
+            if (intervalo) {
+                const [intervaloHoras, intervaloMins] = intervalo.split(':').map(Number);
+                const intervaloTotalMins = intervaloHoras * 60 + intervaloMins;
+                diffMins -= intervaloTotalMins;
+            }
+            
+            // Garantir que não seja negativo
+            diffMins = Math.max(0, diffMins);
+            
+            // Converter para HH:MM
+            const horas = Math.floor(diffMins / 60);
+            const minutos = diffMins % 60;
+            
+            const horasFormatadas = horas.toString().padStart(2, '0');
+            const minutosFormatados = minutos.toString().padStart(2, '0');
+            
+            document.getElementById('horasTrabalhadas').value = `${horasFormatadas}:${minutosFormatados}`;
+        }
+        
+        // Excluir um RAT
+        function deleteRat(id) {
+            if (confirm('Tem certeza que deseja excluir este RAT?')) {
+                // Se estiver editando este RAT, cancelar a edição
+                if (isEditing && currentEditId === id) {
+                    resetForm();
+                }
+                
+                rats = rats.filter(r => r.id !== id);
+                saveRats();
+                updateRatsList();
+                showNotification('RAT excluído com sucesso!', 'success');
+            }
+        }
+        
+        // Gerar markdown para um RAT (para visualização)
+        function generateMarkdown(id) {
+            const rat = rats.find(r => r.id === id);
+            if (!rat) return;
+            
+            // Formatar data sem problemas de fuso horário
+            let dataFormatada;
+            const dataParts = rat.dataInicio.split('-');
+            
+            if (dataParts.length === 3) {
+                // Formato YYYY-MM-DD para DD/MM/YYYY
+                dataFormatada = `${dataParts[2]}/${dataParts[1]}/${dataParts[0]}`;
+            } else {
+                // Fallback para formato local
+                try {
+                    const dataObj = new Date(rat.dataInicio + 'T00:00:00');
+                    dataFormatada = dataObj.toLocaleDateString('pt-BR');
+                } catch (e) {
+                    dataFormatada = rat.dataInicio;
+                }
+            }
+            
+            // Formatar data de término
+            let dataFimFormatada;
+            const dataFimParts = rat.dataFim.split('-');
+            
+            if (dataFimParts.length === 3) {
+                // Formato YYYY-MM-DD para DD/MM/YYYY
+                dataFimFormatada = `${dataFimParts[2]}/${dataFimParts[1]}/${dataFimParts[0]}`;
+            } else {
+                // Fallback para formato local
+                try {
+                    const dataObj = new Date(rat.dataFim + 'T00:00:00');
+                    dataFimFormatada = dataObj.toLocaleDateString('pt-BR');
+                } catch (e) {
+                    dataFimFormatada = rat.dataFim;
+                }
+            }
+            
+            // Calcular totais
+            const totalKm = rat.totalKm || (rat.distanciaKm * rat.valorKm || rat.distanciaKm * VALOR_KM);
+            const totalDespesas = rat.valorAlimentacao + totalKm + rat.valorPedagio + rat.valorOutros;
+            
+            // Criar markdown com layout em duas colunas para Detalhes do Atendimento
+            const markdown = `# RELATÓRIO DE ATENDIMENTO TÉCNICO - RAT #${rat.id}
+
+## Informações do Projeto
+- **Projeto/Sistema:** ${rat.projeto}
+- **Cliente/Empresa:** ${rat.empresa}
+- **CNPJ:** ${rat.cnpj || 'Não informado'}
+- **Contato:** ${rat.contato || 'Não informado'}
+- **Consultor:** ${rat.consultor || consultorInput.value || 'Não informado'}
+
+## Detalhes do Atendimento
+| | |
+| :--- | :--- |
+| **Tipo de Atendimento:** ${rat.tipoAtendimento} | ${rat.tipoAtendimento === 'Presencial' && rat.distanciaKm > 0 ? `**Distância Percorrida:** ${rat.distanciaKm} km` : ''} |
+| **Data de Início:** ${dataFormatada} | **Hora de Início:** ${rat.horaInicio} |
+| **Data de Término:** ${dataFimFormatada} | **Hora de Término:** ${rat.horaFim || 'Não informada'} |
+| **Intervalo:** ${rat.intervalo} | **Horas Trabalhadas:** ${rat.horasTrabalhadas} |
+
+## Descrição do Serviço
+${rat.descricao}
+
+## Despesas
+| Item | Valor (R$) |
+| :--- | :--- |
+| **Alimentação** | ${rat.valorAlimentacao.toFixed(2)} |
+${rat.tipoAtendimento === 'Presencial' && totalKm > 0 ? `| **Combustível** | ${totalKm.toFixed(2)} |\n` : ''}
+${rat.tipoAtendimento === 'Presencial' && rat.valorPedagio > 0 ? `| **Pedágio** | ${rat.valorPedagio.toFixed(2)} |\n` : ''}
+${rat.valorOutros > 0 ? `| **Outros** | ${rat.valorOutros.toFixed(2)} |\n` : ''}
+| **TOTAL** | **${totalDespesas.toFixed(2)}** |
+
+## Observações
+${rat.observacao || 'Nenhuma observação adicional.'}
+
+---
+*Relatório gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}*`;
+            
+            // Exibir no modal
+            markdownContent.textContent = markdown;
+            markdownModal.classList.add('active');
+            
+            // Armazenar markdown atual para download/cópia
+            window.currentMarkdown = markdown;
+            window.currentMarkdownFilename = `RAT_${rat.id}_${rat.projeto.replace(/\s+/g, '_')}_${rat.dataInicio}.md`;
+        }
+        
+        // Copiar markdown para a área de transferência
+        function copyMarkdownToClipboard() {
+            if (!window.currentMarkdown) return;
+            
+            navigator.clipboard.writeText(window.currentMarkdown)
+                .then(() => {
+                    showNotification('Markdown copiado para a área de transferência!', 'success');
+                })
+                .catch(err => {
+                    console.error('Erro ao copiar: ', err);
+                    showNotification('Erro ao copiar para a área de transferência', 'error');
+                });
+        }
+        
+        // Baixar markdown como arquivo
+        function downloadMarkdown() {
+            if (!window.currentMarkdown || !window.currentMarkdownFilename) return;
+            
+            const blob = new Blob([window.currentMarkdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = window.currentMarkdownFilename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Markdown baixado com sucesso!', 'success');
+        }
+        
+        // Exportar todos os RATs como JSON
+        function exportJson() {
+            const dataStr = JSON.stringify(rats, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `rats_${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('JSON exportado com sucesso!', 'success');
+        }
+        
+        // Importar RATs de um arquivo JSON
+        function importJson() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const importedRats = JSON.parse(event.target.result);
+                        
+                        if (!Array.isArray(importedRats)) {
+                            throw new Error('O arquivo não contém um array válido de RATs');
+                        }
+                        
+                        // Verificar se os objetos têm a estrutura básica
+                        const validRats = importedRats.filter(rat => rat.projeto && rat.empresa);
+                        
+                        if (validRats.length === 0) {
+                            throw new Error('Nenhum RAT válido encontrado no arquivo');
+                        }
+                        
+                        // Adicionar IDs únicos para novos registros
+                        validRats.forEach(rat => {
+                            if (!rat.id || rats.find(r => r.id === rat.id)) {
+                                rat.id = nextId++;
+                            }
+                            
+                            // Garantir que os novos campos existam (para compatibilidade com versões antigas)
+                            if (!rat.tipoAtendimento) {
+                                rat.tipoAtendimento = 'Presencial';
+                            }
+                            if (!rat.distanciaKm) {
+                                rat.distanciaKm = 0;
+                            }
+                            if (!rat.valorKm) {
+                                rat.valorKm = VALOR_KM;
+                            }
+                            if (!rat.totalKm) {
+                                rat.totalKm = (rat.distanciaKm || 0) * (rat.valorKm || VALOR_KM);
+                            }
+                            if (!rat.consultor) {
+                                rat.consultor = consultorInput.value || 'Não informado';
+                            }
+                        });
+                        
+                        // Adicionar aos RATs existentes
+                        rats.push(...validRats);
+                        
+                        // Salvar no localStorage
+                        saveRats();
+                        
+                        // Atualizar interface
+                        updateRatsList();
+                        
+                        // Cancelar edição se estiver editando
+                        if (isEditing) {
+                            resetForm();
+                        }
+                        
+                        showNotification(`${validRats.length} RAT(s) importado(s) com sucesso!`, 'success');
+                    } catch (error) {
+                        console.error('Erro ao importar JSON:', error);
+                        showNotification(`Erro ao importar: ${error.message}`, 'error');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+        
+        // Limpar todos os dados
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja limpar TODOS os dados? Esta ação não pode ser desfeita.')) {
+                rats = [];
+                nextId = 1;
+                saveRats();
+                updateRatsList();
+                resetForm();
+                showNotification('Todos os dados foram removidos!', 'success');
+            }
+        }
+        
+        // Mostrar notificação
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
