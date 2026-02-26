@@ -1832,8 +1832,8 @@ ${rat.observacao || 'Nenhuma observação adicional.'}
             delete ratCopy.id;
             ratCopy.dataCriacao = new Date().toISOString();
 
-            // Adicionar " (Cópia)" ao nome do projeto
-            ratCopy.projeto = ratCopy.projeto + " (Cópia)";
+            // Não Adicionar " (Cópia)" ao nome do projeto
+            ratCopy.projeto = ratCopy.projeto;// + " (Cópia)";
 
             // Recalcular totalKm com o valor atual de VALOR_KM
             ratCopy.totalKm = (ratCopy.distanciaKm || 0) * VALOR_KM;
