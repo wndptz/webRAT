@@ -1131,14 +1131,19 @@
             const savedRats = localStorage.getItem('rats');
             if (savedRats) {
                 rats = JSON.parse(savedRats);
-                nextId = rats.length > 0 ? Math.max(...rats.map(rat => rat.id)) + 1 : 1;
+                atualizarNextId();
             }
+        }
+
+        // Atualizar nextId com base nos RATs atuais
+        function atualizarNextId() {
+            nextId = rats.length > 0 ? Math.max(...rats.map(rat => parseInt(rat.id, 10) || 0)) + 1 : 1;
         }
 
         // Salvar RATs no localStorage
         function saveRats() {
             localStorage.setItem('rats', JSON.stringify(rats));
-        }
+        
 
         // Atualizar lista de RATs na interface
         function updateRatsList() {
@@ -1380,6 +1385,32 @@
                 updateRatsList();
             }
 
+            // Verificar se há múltiplos clientes (empresas) nos RATs selecionados
+            const checkboxes = ratsCheckboxGroup.querySelectorAll('input[type="checkbox"]:checked');
+            const ratsSelecionadosIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+            const ratsSelecionados = rats.filter(rat => ratsSelecionadosIds.includes(rat.id));
+            
+            if (ratsSelecionados.length > 0) {
+                const empresasUnicas = new Set(ratsSelecionados.map(rat => rat.empresa));
+                
+                if (empresasUnicas.size > 1) {
+                    let mensagemEmpresas = `⚠️ ATENÇÃO: Foram selecionados RATs de ${empresasUnicas.size} clientes diferentes:\n\n`;
+                    
+                    // Listar os clientes
+                    const clientesArray = Array.from(empresasUnicas).sort();
+                    clientesArray.forEach(empresa => {
+                        const ratsDoCliente = ratsSelecionados.filter(rat => rat.empresa === empresa);
+                        mensagemEmpresas += `• ${empresa} (${ratsDoCliente.length} RAT(s))\n`;
+                    });
+                    
+                    mensagemEmpresas += `\nDeseja continuar faturando todos esses clientes juntos?`;
+                    
+                    if (!confirm(mensagemEmpresas)) {
+                        return; // Usuário cancelou
+                    }
+                }
+            }
+
             // Gerar faturamento com RATs selecionados
             gerarFaturamento();
         }
@@ -1456,12 +1487,27 @@
             let totalValorHorasCalculado = 0;
 
             // Gerar markdown do faturamento
-            const consultor = consultorInput.value.trim() || 'Não informado';
-            const primeiroNomeConsultor = consultor.split(' ')[0];
             const dataAtual = new Date().toISOString().split('T')[0];
+            
+            // Obter consultores únicos dos RATs selecionados
+            const consultoresUnicos = new Set(ratsSelecionados.map(rat => rat.consultor || consultorInput.value.trim() || 'Não informado'));
+            const consultoresArray = Array.from(consultoresUnicos).sort();
+            
+            // Extrair primeiro nome do primeiro consultor para o nome do arquivo
+            const primeiroConsultorNome = consultoresArray[0] || consultorInput.value.trim() || 'Consultor';
+            const primeiroNomeConsultor = primeiroConsultorNome.split(' ')[0];
 
             let markdown = `# RELATÓRIO DE FATURAMENTO - CONSULTORIA TÉCNICA\n\n`;
-            markdown += `**Consultor:** ${consultor}\n`;
+            
+            // Montar seção de consultor(es)
+            if (consultoresArray.length === 1) {
+                markdown += `**Consultor:** ${consultoresArray[0]}\n`;
+            } else {
+                markdown += `**Consultor:**\n`;
+                consultoresArray.forEach(cons => {
+                    markdown += `* ${cons}\n`;
+                });
+            }
             markdown += `**Valor da Hora:** R$ ${valorHora.toFixed(2)}\n`;
             markdown += `**Data do Faturamento:** ${new Date().toLocaleDateString('pt-BR')}\n`;
             markdown += `**Quantidade de RATs:** ${ratsSelecionados.length}\n\n`;
@@ -1570,20 +1616,21 @@
                 return;
             }
 
-            const consultor = consultorInput.value.trim() || 'Consultor';
-            const primeiroNomeConsultor = consultor.split(' ')[0];
-
             // Para cada RAT, gerar e baixar markdown
             rats.forEach(rat => {
                 // Gerar markdown para este RAT
-                generateMarkdownForDownload(rat, primeiroNomeConsultor);
+                generateMarkdownForDownload(rat);
             });
 
             showNotification(`${rats.length} RAT(s) exportado(s) com sucesso!`, 'success');
         }
 
         // Gerar markdown para download de um RAT específico
-        function generateMarkdownForDownload(rat, primeiroNomeConsultor) {
+        function generateMarkdownForDownload(rat) {
+            // tratar primeiro nome do consultor para o nome do arquivo
+            const consultor = rat.consultor || consultorInput.value.trim() || 'Consultor';
+            const primeiroNomeConsultor = consultor.split(' ')[0];
+
             // Formatar data sem problemas de fuso horário
             let dataFormatada;
             const dataParts = rat.dataInicio.split('-');
@@ -1659,7 +1706,7 @@ ${rat.observacao || 'Nenhuma observação adicional.'}
 *Relatório gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}*`;
 
             // Criar nome do arquivo: primeira palavra do consultor + dataInicio + id
-            const nomeArquivo = `${primeiroNomeConsultor}_${rat.dataInicio}_${rat.id}.md`;
+            const nomeArquivo = `${rat.id}_${primeiroNomeConsultor}_${rat.dataInicio}.md`;
 
             // Baixar arquivo
             const blob = new Blob([markdown], { type: 'text/markdown' });
@@ -1825,6 +1872,8 @@ ${rat.observacao || 'Nenhuma observação adicional.'}
             const rat = rats.find(r => r.id === id);
             if (!rat) return;
 
+            atualizarNextId();
+
             // Criar cópia do RAT
             const ratCopy = JSON.parse(JSON.stringify(rat));
 
@@ -1839,7 +1888,7 @@ ${rat.observacao || 'Nenhuma observação adicional.'}
             ratCopy.totalKm = (ratCopy.distanciaKm || 0) * VALOR_KM;
             ratCopy.valorKm = VALOR_KM;
 
-            // Adicionar à lista
+            // Adicionar à lista com ID único
             ratCopy.id = nextId++;
             rats.push(ratCopy);
 
@@ -2137,10 +2186,18 @@ ${rat.observacao || 'Nenhuma observação adicional.'}
                             throw new Error('Nenhum RAT válido encontrado no arquivo');
                         }
 
-                        // Adicionar IDs únicos para novos registros
+                        atualizarNextId();
+
+                        // Manter controle de IDs usados para evitar duplicação entre importados e existentes
+                        const usedIds = new Set(rats.map(r => parseInt(r.id, 10) || 0));
+
                         validRats.forEach(rat => {
-                            if (!rat.id || rats.find(r => r.id === rat.id)) {
+                            const importedId = Number(rat.id);
+                            if (!Number.isInteger(importedId) || importedId <= 0 || usedIds.has(importedId)) {
                                 rat.id = nextId++;
+                            } else {
+                                rat.id = importedId;
+                                usedIds.add(rat.id);
                             }
 
                             // Garantir que os novos campos existam (para compatibilidade com versões antigas)
@@ -2163,6 +2220,7 @@ ${rat.observacao || 'Nenhuma observação adicional.'}
 
                         // Adicionar aos RATs existentes
                         rats.push(...validRats);
+                        atualizarNextId();
 
                         // Salvar no localStorage
                         saveRats();
